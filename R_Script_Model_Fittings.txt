@@ -1,0 +1,283 @@
+#Nonlinear regression model fitting
+#MSc Thesis Lisa Kopsieker
+
+library(ggplot2)
+
+#Graph original nni output
+UK_plot<-ggplot(UK_nni_site, aes(y=NNI, x=SEQ)) +  
+  geom_point(size=1.0) +
+  theme_classic() + labs(title= "UK", x="Sequence", y="NNI") +
+  theme(axis.title.x = element_text(size = 12), axis.text.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12), axis.text.y = element_text(size = 12))
+print(UK_plot)
+      
+#Apply x and y values
+y = UK_nni_site$NNI
+x = UK_nni_site$SEQ
+plot(y~x)
+
+# Linear
+m1 <- lm(y ~ x) #create model
+summary(m1) #model summary
+coef(m1) #get and assign coefficients
+b0 <-  0.832770303
+b1 <- -0.002362197 
+AIC(m1) #get AIC value for model
+
+# Generate model y values (for linear plot)
+m1_y <- b0 + b1 * x
+m1df <- data.frame(m1_y, x)   # Turn into dataframe
+
+# Plot method 1
+pm1 <- ggplot(data = m1df, aes(x = x, y = m1_y)) +
+  geom_line(data = data.frame(x, y), aes(x = x, y = y)) +   # original data line
+  geom_point(data = data.frame(x, y), aes(x = x, y = y)) +  # original data points
+  geom_line(colour = 'red') +   # Print line for model
+  labs(title = "UK | Linear", x="Sequence", y="NNI")
+print(pm1)    # print plot
+
+# Plot method 2
+UK_plot <- ggplot(UK_nni_asc, aes(sequence, NNI)) + #Another option of modelling and graphing in one
+  geom_point() + theme_classic() +
+  geom_smooth(method = "lm", 
+              formula = y ~ x,
+              method.args = list(start = list(b0 = 1, b1 = 1)),
+              se=FALSE, colour = 'red') +
+  labs(title = "UK | Linear", x="Sequence", y="NNI") +
+  theme(axis.title.x = element_text(size = 12), axis.text.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12), axis.text.y = element_text(size = 12))
+print(UK_plot) #print plot
+
+# Logarithmic
+m2 <- nls(y ~ I(b0 + (b1 * log(x))), data.frame(x, y), start = list(b0 = 1, b1 = 1)) 
+summary(pm2)
+coef(m2)['b0']
+coef(m2)['b1']
+AIC(m2)
+
+# Generate model y values (for logarithmic plot)
+m2_y <- coef(m2)['b0'] + (coef(m2)['b1']*log(x))
+m2df <- data.frame(m2_y, x)   # Turn into dataframe
+
+# Plot
+pm2 <- ggplot(data = m2df, aes(x = x, y = m2_y)) +
+  geom_line(data = data.frame(x, y), aes(x = x, y = y)) +   # ooriginal data points
+  geom_line(colour = 'red') +
+  labs(title = "UK | Logarithmic", x="Sequence", y="NNI") # Print line for model
+print(pm2)    # print plot
+
+ggplot(UK_nni_asc, aes(sequence, NNI)) + 
+  geom_point() + geom_line() +
+  geom_smooth(method = "nls", 
+              formula = y ~ I(b0 + (b1 * log(x))),
+              method.args = list(start = list(b0 = 1, b1 = 1)),
+              se=FALSE, colour = 'red') +
+  labs(title = "UK | Logarithmic", x="Sequence", y="NNI")
+
+
+#Cubic (third degree polynomial)
+m3 <- nls(y ~ I(b0 + (b1 * x + b2 * (x^2) + b3 * (x^3))), data.frame(x, y), start = list(b0 = 1, b1 = 1, b2 = 1, b3 = 1))
+summary(m3)
+AIC(m3)
+
+pm3 <- lm(y ~ x + I(x^2) + I(x^3)) #method 2: doesn't always work
+summary(pm3)
+plot(y~x)
+
+UK_nni_asc$Year <- as.numeric(UK_nni_asc$Year) #make sure year is numerical
+
+UK_plot <- ggplot(UK_nni_site, aes(SEQ, NNI)) + 
+  geom_point() + theme_classic() +
+  geom_smooth(method = "lm", 
+              formula = y ~ x + I(x^2) + I(x^3),
+              method.args = list(start = list(b0 = 1, b1 = 1)),
+              se=FALSE, colour = 'red') +
+  labs(title = "UK | Cubic", x="Sequence", y="NNI") +
+  theme(axis.title.x = element_text(size = 12), axis.text.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12), axis.text.y = element_text(size = 12))
+print(UK_plot)
+
+#Power
+m4 <- nls(y ~ I(b0 * x^b1), data.frame(x, y), start = list(b0 = 1, b1 = 1)) #what should be the start value?
+summary(m4)
+coef(m4)['b0']
+coef(m4)['b1']
+AIC(m4)
+
+# Generate model y values (for power plot)
+m4_y <- coef(m4)['b0'] * x ^ coef(m4)['b1']
+m4df <- data.frame(m4_y, x)   # turn into dataframe
+
+# Plot
+pm4 <- ggplot(data = m4df, aes(x = x, y = m4_y)) +
+  geom_line(data = data.frame(x, y), aes(x = x, y = y)) +   # original data line
+  geom_point(data = data.frame(x, y), aes(x = x, y = y)) +  # original data points
+  geom_line(colour = 'red') +
+  labs(title = "UK | Power", x="Sequence", y="NNI")# Print line for model
+print(pm4)    # Print plot
+
+ggplot(UK_nni_asc, aes(sequence, NNI)) + 
+  geom_point() + geom_line() +
+  geom_smooth(method = "nls", 
+              formula = y ~ I(b0 * x^b1),
+              method.args = list(start = list(b0 = 1, b1 = 1)),
+              se=FALSE, colour = 'red') +
+  labs(title = "UK | Power", x="Sequence", y="NNI")
+
+#Compound 
+m5 <- nls(y ~ I(b0 * b1^x), data.frame(x, y), start = list(b0 = 1, b1 = 1)) #what should be the start value?
+summary(m5)
+coef(m5)['b0']
+coef(m5)['b1']
+AIC(m5)
+
+# Generate model y values (for compound plot)
+m5_y <- coef(m5)['b0'] * coef(m5)['b1'] ^ x
+m5df <- data.frame(m5_y, x)   # Turn into dataframe
+
+# Plot!
+pm5 <- ggplot(data = m5df, aes(x = x, y = m5_y)) +
+  geom_line(data = data.frame(x, y), aes(x = x, y = y)) +   # original data line
+  geom_point(data = data.frame(x, y), aes(x = x, y = y)) +  # original data points
+  geom_line(colour = 'red') +
+  labs(title = "UK | Compound", x="Sequence", y="NNI") # Print line for model
+print(pm5)    # Print plot
+
+ggplot(UK_nni_asc, aes(sequence, NNI)) + 
+  geom_point() + geom_line() +
+  geom_smooth(method = "nls", 
+              formula = y ~ I(b0 * b1^x),
+              method.args = list(start = list(b0 = 1, b1 = 1)),
+              se=FALSE, colour = 'red') +
+  labs(title = "UK | Compound", x="Sequence", y="NNI")
+
+# Inverse
+m6 <- nls(y ~ I(b0 + (b1/x)), data.frame(x, y), start = list(b0 = 0, b1 = 0))
+summary(m6)
+coef(m6)['b0']
+coef(m6)['b1']
+AIC(m6)
+
+# Generate model y values (for inverse plot)
+m6_y <- coef(m6)['b0'] * coef(m6)['b1']/x
+m6df <- data.frame(m6_y, x)   # Turn into dataframe
+
+# Plot!
+pm6 <- ggplot(data = m6df, aes(x = x, y = m6_y)) +
+  geom_line(data = data.frame(x, y), aes(x = x, y = y)) +   # original data line
+  geom_point(data = data.frame(x, y), aes(x = x, y = y)) +  # original data points
+  geom_line(colour = 'red') +
+  labs(title = "Catalunya | Inverse", x="Sequence", y="NNI")# Print line for model
+print(pm6)    # Print plot
+
+ggplot(UK_nni_asc, aes(sequence, NNI)) + 
+  geom_point() + geom_line() +
+  geom_smooth(method = "nls", 
+              formula = y ~ I(b0 + (b1/x)),
+              method.args = list(start = list(b0 = 1, b1 = 1)),
+              se=FALSE, colour = 'red') +
+  labs(title = "UK | Inverse", x="Sequence", y="NNI")
+
+
+# S-curve
+m7 <- nls(y ~ I(exp(b0 + b1/x)), data.frame(x, y), start = list(b0 = 1, b1 = 1))
+summary(m7)
+coef(m7)['b0']
+coef(m7)['b1']
+AIC(m7)
+
+# Generate model y values (for s-curve plot)
+m7_y <- exp(coef(m7)['b0'] + (coef(m7)['b1']/x))
+m7df <- data.frame(m7_y, x)   # Turn into dataframe
+
+# Plot
+pm7 <- ggplot(data = m7df, aes(x = x, y = m7_y)) +
+  geom_line(data = data.frame(x, y), aes(x = x, y = y)) +   # original data line
+  geom_point(data = data.frame(x, y), aes(x = x, y = y)) +  # original data points
+  geom_line(colour = 'red') +
+  labs(title = "UK | S-Curve", x="Sequence", y="NNI")# Print line for model
+print(pm7)    # Print plot
+
+Catalunya_plot <- ggplot(UK_nni_asc, aes(sequence, NNI)) + 
+  geom_point() + theme_classic() +
+  geom_smooth(method = "nls", 
+              formula = y ~ I(exp(b0 + b1/x)),
+              method.args = list(start = list(b0 = 1, b1 = 1)),
+              se=FALSE, colour = 'red') +
+  labs(title = "UK | S-Curve", x="Sequence", y="NNI") + 
+  theme(axis.title.x = element_text(size = 12), axis.text.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12), axis.text.y = element_text(size = 12))
+print(UK_plot)
+
+
+# Growth
+m8 <- nls(y ~ I(exp(b0 + b1*x)), data.frame(x, y), start = list(b0 = 1, b1 = 1)) #b0=log(1) for Flanders
+summary(m8)
+coef(m8)['b0']
+coef(m8)['b1']
+AIC(m8)
+
+# Generate model y values (for growth plot)
+m8_y <- exp(coef(m8)['b0'] + (coef(m8)['b1']*x))
+m8df <- data.frame(m8_y, x)   # Turn into dataframe
+
+# Plot!
+pm8 <- ggplot(data = m8df, aes(x = x, y = m8_y)) +
+  geom_line(data = data.frame(x, y), aes(x = x, y = y)) +   # original data line
+  geom_point(data = data.frame(x, y), aes(x = x, y = y)) +  # original data points
+  geom_line(colour = 'red') +
+  labs(title = "UK | Growth", x="Sequence", y="NNI")# Print line for model
+print(pm8)    # Print plot
+
+ggplot(UK_nni, aes(sequence, NNI)) + 
+  geom_point() + 
+  geom_smooth(method = "nls", 
+              formula = y ~ I(exp(b0 + (b1*x))),
+              method.args = list(start = list(b0 = 1, b1 = 1)),
+              se=FALSE, colour = 'red') +
+  labs(title = "UK | Growth", x="Sequence", y="NNI")
+
+#Exponential
+m9 <- nls(y ~ I(b0 * exp(b1*x)), data.frame(x, y), start = list(b0 = 0, b1 = 0)) #Doesn't work yet!!
+summary(m9)
+coef(m9)['b0']
+coef(m9)['b1']
+AIC(m9)
+
+ggplot(UK_nni, aes(sequence, NNI)) + 
+  geom_point() + 
+  geom_smooth(method = "nls", 
+              formula = y ~ I(exp(b0 + exp(b1*x))),
+              method.args = list(start = list(b0 = 1, b1 = 1)),
+              se=FALSE, colour = 'red') +
+  labs(title = "UK | Exponential", x="Sequence", y="NNI")
+
+#Quadratic
+m10 <- nls(y ~ I(b0 + (b1 * x + b2 * (x^2))), data.frame(x, y), start = list(b0 = 1, b1 = 1, b2 = 1))
+summary(m10)
+AIC(m10)
+
+UK_plot <- ggplot(UK_nni_asc, aes(sequence, NNI)) + 
+  geom_point() + theme_classic() +
+  geom_smooth(method = "lm", 
+              formula = y ~ x + I(x^2),
+              method.args = list(start = list(b0 = 1, b1 = 1, b2 = 1)),
+              se=FALSE, colour = 'red') +
+  labs(title = "UK | Quadratic", x="Sequence", y="NNI") +
+  theme(axis.title.x = element_text(size = 12), axis.text.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12), axis.text.y = element_text(size = 12))
+print(UK_plot)
+
+
+#plot all nni graphs in one
+library("cowplot", lib.loc="/Library/Frameworks/R.framework/Versions/3.6/Resources/library")
+library("ggpubr", lib.loc="/Library/Frameworks/R.framework/Versions/3.6/Resources/library")
+total_plot <- ggarrange(UK_plot, Flanders_plot, Finland_plot, Catalunya_plot,
+          ncol = 2, nrow = 2)
+print(total_plot)
+
+#Export plot
+png("Plot1.png", width = 9, height = 7, units = 'in', res = 300)
+plot(total_plot) # Make plot
+dev.off()
+ 
