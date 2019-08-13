@@ -1,5 +1,6 @@
 #Nearest neighbour index calculation
 #MSc Thesis Lisa Kopsieker
+#Submitted 29th August 2019
 
 #load required packages
 library("maptools", lib.loc="/Library/Frameworks/R.framework/Versions/3.6/Resources/library")
