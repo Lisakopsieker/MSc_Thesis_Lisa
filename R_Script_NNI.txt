@@ -2,7 +2,7 @@
 #MSc Thesis Lisa Kopsieker
 #Submitted 29th August 2019
 
-#load required packages
+# load required packages
 library("maptools", lib.loc="/Library/Frameworks/R.framework/Versions/3.6/Resources/library")
 library("sp", lib.loc="/Library/Frameworks/R.framework/Versions/3.6/Resources/library")
 library("spatstat", lib.loc="/Library/Frameworks/R.framework/Versions/3.6/Resources/library")
@@ -14,19 +14,19 @@ library("spdplyr", lib.loc="/Library/Frameworks/R.framework/Versions/3.6/Resourc
 library("cowplot", lib.loc="/Library/Frameworks/R.framework/Versions/3.6/Resources/library")
 library("ggpubr", lib.loc="/Library/Frameworks/R.framework/Versions/3.6/Resources/library")
 
-#import shapefiles 
+# import shapefiles 
 UK <- readOGR("/Users/lisakopsieker/Desktop/OneDrive\ -\ Imperial\ College\ London/MScProjectLisa/Confirmed_PPAs/Confirmed\ PPAs_2/GBR/UK_projected_2.shp")
 Flanders <- readOGR("/Users/lisakopsieker/Desktop/OneDrive\ -\ Imperial\ College\ London/MScProjectLisa/Confirmed_PPAs/Confirmed\ PPAs_2/Belgium/flanders_projected_utm.shp")
 Catalunya <- readOGR("/Users/lisakopsieker/Desktop/OneDrive\ -\ Imperial\ College\ London/MScProjectLisa/Confirmed_PPAs/Confirmed\ PPAs_2/Spain/Catalunya_projected_utm.shp")
 Finland <- readOGR("/Users/lisakopsieker/Desktop/OneDrive\ -\ Imperial\ College\ London/MScProjectLisa/Confirmed_PPAs/Confirmed\ PPAs_2/Finland/finland_projected_utm.shp")
 
-#convert to ppp format
+# convert to ppp format
 UK_ppp <- as(UK, "ppp")
 Flanders_ppp <- as(Flanders, "ppp")
 Catalunya_ppp <- as(Catalunya, "ppp")
 Finland_ppp <- as(Finland, "ppp")
 
-#import boundary layers
+# import boundary layers
 UK_boundary <- readOGR("/Users/lisakopsieker/Desktop/OneDrive\ -\ Imperial\ College\ London/MScProjectLisa/Administrative_boundaries/UK/UK_boundary_projected_2.shp")
 UK_boundary_owin <- as(UK_boundary, "owin")
 Flanders_boundary <- readOGR("/Users/lisakopsieker/Desktop/OneDrive\ -\ Imperial\ College\ London/MScProjectLisa/Administrative_boundaries/Belgium/gadm36_BEL_projected_utm.shp")
@@ -36,7 +36,7 @@ Catalunya_boundary_owin <- as(Catalunya_boundary, "owin")
 Finland_boundary <- readOGR("/Users/lisakopsieker/Desktop/OneDrive\ -\ Imperial\ College\ London/MScProjectLisa/Administrative_boundaries/Finland/projected_2.shp")
 Finland_boundary_owin <- as(Finland_boundary, "owin")
 
-#explore the spatial dimensions of the datasets
+# explore the spatial dimensions of the datasets
 marks(UK_ppp)  <- NULL #remove marks from point pattern
 Window(UK_ppp) <- UK_boundary_owin #bind UK boundary to point pattern
 plot(UK_ppp, main=NULL, cols=rgb(0,0,0,.2), pch=20) #plot to check layout
@@ -53,13 +53,13 @@ marks(Finland_ppp) <- NULL
 Window(Finland_ppp) <- Finland_boundary_owin
 plot(Finland_ppp, main = NULL, cols = rgb(0,0,0,.2), pch = 20)
 
-#revert back to original attribute tables
+# revert back to original attribute tables
 UK_ppp <- as(UK, "ppp")
 Flanders_ppp <- as(Flanders, "ppp")
 Catalunya_ppp <- as(Catalunya, "ppp")
 Finland_ppp <- as(Finland, "ppp")
 
-#flanders, belgium NNI analysis
+# flanders, belgium NNI analysis
 Flanders_2 <- Flanders %>%
   mutate(Year=format(as.Date(Flanders$DatumMB, format="%Y/%m/%d"),"%Y")) %>%
   group_by(Year) #separate dataset into years
@@ -270,11 +270,11 @@ Year <- 2015
 nni_2015$Year <- Year
 Flanders_nni_2 <- rbind(nni_2015,Flanders_nni_2)
 
-#order data frame
+# order data frame
 Flanders_nni_asc <- Flanders_nni_2[with(Flanders_nni_2, order(Year)), ]
 Flanders_nni_asc$sequence <- 1:nrow(Flanders_nni_2) #add column for sequence no. relaive to year
 
-#plot flanders_nni
+# plot flanders_nni
 Flanders_plot<-ggplot(Flanders_nni_asc, aes(y=NNI, x=sequence)) + 	#plot results to visualize
   geom_point() +
   theme_classic() + labs(title= "Flanders, Belgium", x="Sequence", y="NNI") +
@@ -283,7 +283,7 @@ Flanders_plot<-ggplot(Flanders_nni_asc, aes(y=NNI, x=sequence)) + 	#plot results
 print(Flanders_plot)
 
 
-#finland NNI analysis
+# finland NNI analysis
 Finland_2 <- Finland %>%
   mutate(Year=format(as.Date(Finland$PaatPvm, format="%Y/%m/%d"),"%Y")) %>%
   group_by(Year)
@@ -1339,11 +1339,11 @@ Year <- 2018
 nni_2018$Year <- Year
 Finland_nni <- rbind(nni_2018,Finland_nni)
 
-#order data frame
+# order data frame
 Finland_nni_asc <- Finland_nni[with(Finland_nni, order(Year)), ]
 Finland_nni_asc$sequence <- 1:nrow(Finland_nni) #add column for sequence no. relaive to year
 
-#plot finland_nni
+# plot finland_nni
 Finland_plot<-ggplot(Finland_nni_asc, aes(y=NNI, x=sequence)) + 
   geom_point() +
   theme_classic() + labs(title= "Finland", x="Sequence", y="NNI") +
@@ -1352,7 +1352,7 @@ Finland_plot<-ggplot(Finland_nni_asc, aes(y=NNI, x=sequence)) +
 print(Finland_plot)
 
 
-#UK NNI analysis
+# UK NNI analysis
 UK_2 <- UK %>%
   mutate(Year=format(as.Date(UK$STATUS_YR, format="%Y"),"%Y")) %>%
   group_by(Year)
@@ -2978,11 +2978,11 @@ Year <- 2012
 nni_2012$Year <- Year
 UK_nni_2 <- rbind(nni_2012,UK_nni_2)
 
-#order data frame
+# order data frame
 UK_nni_asc <- UK_nni_2[with(UK_nni_2, order(Year)), ]
 UK_nni_asc$sequence <- 1:nrow(UK_nni_2) #add column for sequence no. relaive to year
 
-#plot UK_nni
+# plot UK_nni
 UK_plot<-ggplot(UK_nni_asc, aes(y=NNI, x=sequence)) + 
   geom_point() +
   theme_classic() + labs(title= "UK", x="Sequence", y="NNI") +
@@ -2990,7 +2990,7 @@ UK_plot<-ggplot(UK_nni_asc, aes(y=NNI, x=sequence)) +
         axis.title.y = element_text(size = 12), axis.text.y = element_text(size = 12))
 print(UK_plot)
 
-#cataluña NNI analysis
+# cataluña NNI analysis
 Catalunya_2 <- Catalunya %>%
   mutate(Year=format(as.Date(Catalunya$Any_acord, format="%Y"),"%Y")) %>%
   group_by(Year)
@@ -3123,12 +3123,12 @@ Year <- 2017
 nni_2017$Year <- Year
 Catalunya_nni <- rbind(nni_2017,Catalunya_nni)
 
-#order data frame
+# order data frame
 Catalunya_nni_asc <- Catalunya_nni[with(Catalunya_nni, order(Year)), ]
 Catalunya_nni_asc$sequence <- 1:nrow(Catalunya_nni) #add column for sequence no. relaive to year
 
 
-#plot catalunya_nni
+# plot catalunya_nni
 y = Catalunya_nni$NNI
 x = Catalunya_nni$sequence
 
@@ -3142,12 +3142,12 @@ Catalunya_plot<-ggplot(Catalunya_nni_asc, aes(y=NNI, x=sequence)) +
         axis.title.y = element_text(size = 12), axis.text.y = element_text(size = 12))
 print(Catalunya_plot)
 
-#combine all graphs in one plot
+# combine all graphs in one plot
 total_plot <- ggarrange(UK_plot, Flanders_plot, Finland_plot, Catalunya_plot,
           ncol = 2, nrow = 2)
           
-#export plot
+# export plot
 png("Plot1.png", width = 9, height = 7, units = 'in', res = 300)
-plot(total_plot) # Make plot
+plot(total_plot) # make plot
 dev.off()
 
