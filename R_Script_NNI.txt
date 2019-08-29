@@ -64,9 +64,9 @@ Flanders_2 <- Flanders %>%
   mutate(Year=format(as.Date(Flanders$DatumMB, format="%Y/%m/%d"),"%Y")) %>%
   group_by(Year) #separate dataset into years
 
-Flanders_1990 <- Flanders_2 %>% filter(Year %in% c("1986", "1988", "1990")) 
+Flanders_1990 <- Flanders_2 %>% filter(Year %in% c("1986", "1988", "1990")) #filter first three years for analysis
 Flanders_nni_2 <- as.data.frame(nni(Flanders_1990)) #create dataframe for NNI results
-Year <- 1990
+Year <- 1990 #assign year row title
 Flanders_nni_2$Year <- Year
 
 Flanders_1992 <-  Flanders_2 %>% filter(Year %in% c("1986", "1988", "1990", "1992")) 
@@ -75,7 +75,7 @@ Year <- 1992
 nni_1992$Year <- Year
 Flanders_nni_2 <- rbind(nni_1992,Flanders_nni_2) #bind new result to existing dataframe
 
-Flanders_1993 <-  Flanders_2 %>% filter(Year %in% c("1986", "1988", "1990", "1992", "1993")) 
+Flanders_1993 <-  Flanders_2 %>% filter(Year %in% c("1986", "1988", "1990", "1992", "1993")) #add next year with establishment to analysis
 nni_1993 <- as.data.frame(nni(Flanders_1993))
 Year <- 1993
 nni_1993$Year <- Year
@@ -286,11 +286,11 @@ print(Flanders_plot)
 # finland NNI analysis
 Finland_2 <- Finland %>%
   mutate(Year=format(as.Date(Finland$PaatPvm, format="%Y/%m/%d"),"%Y")) %>%
-  group_by(Year)
+  group_by(Year) #group by year
 
-Finland_1900 <- filter(Finland_2, Year == 1990)
-Finland_nni <- as.data.frame(nni(Finland_1900))
-Year <- 1900
+Finland_1900 <- filter(Finland_2, Year == 1990) #filter first year
+Finland_nni <- as.data.frame(nni(Finland_1900)) #create data frame
+Year <- 1900 #assign row title
 Finland_nni$Year <- Year
 
 Finland_1926 <-  Finland_2 %>% filter(Year %in% c("1900", "1926")) 
@@ -1355,11 +1355,11 @@ print(Finland_plot)
 # UK NNI analysis
 UK_2 <- UK %>%
   mutate(Year=format(as.Date(UK$STATUS_YR, format="%Y"),"%Y")) %>%
-  group_by(Year)
+  group_by(Year) #format year column and group by year
 
-UK_1908 <- UK_2 %>% filter(Year %in% c("1897", "1898", "1899", "1902", "1904", "1906", "1907", "1908")) 
-UK_nni_2 <- as.data.frame(nni(UK_1908))
-Year <- 1908
+UK_1908 <- UK_2 %>% filter(Year %in% c("1897", "1898", "1899", "1902", "1904", "1906", "1907", "1908")) #filter first 8 years
+UK_nni_2 <- as.data.frame(nni(UK_1908)) #create dataframe
+Year <- 1908 #assign row name
 UK_nni_2$Year <- Year
 
 UK_1909 <-  UK_2 %>% filter(Year %in% c("1897", "1898", "1899", "1902", "1904", "1906",
@@ -2993,80 +2993,80 @@ print(UK_plot)
 # cataluña NNI analysis
 Catalunya_2 <- Catalunya %>%
   mutate(Year=format(as.Date(Catalunya$Any_acord, format="%Y"),"%Y")) %>%
-  group_by(Year)
+  group_by(Year) #format and group by year
 
-Catalunya_2000 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000")) 
-Catalunya_nni <- as.data.frame(nni(Catalunya_2000))
-Year <- 2000
+Catalunya_2000 <- filter(Catalunya_2, Year == 2000) #filter first year
+Catalunya_nni <- as.data.frame(nni(Catalunya_2000)) #create dataframe
+Year <- 2000 #assign row name
 Catalunya_nni$Year <- Year
 
-Catalunya_2001 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001")) 
+Catalunya_2001 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001")) 
 nn1_2001 <- as.data.frame(nni(Catalunya_2001))
 Year <- 2001
 nni_2001$Year <- Year
 Catalunya_nni <- rbind(nni_2001,Catalunya_nni)
 
-Catalunya_2002 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002")) 
+Catalunya_2002 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002")) 
 nn1_2002 <- as.data.frame(nni(Catalunya_2002))
 Year <- 2002
 nni_2002$Year <- Year
 Catalunya_nni <- rbind(nni_2002,Catalunya_nni)
 
-Catalunya_2003 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003")) 
+Catalunya_2003 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003")) 
 nn1_2003 <- as.data.frame(nni(Catalunya_2003))
 Year <- 2003
 nni_2003$Year <- Year
 Catalunya_nni <- rbind(nni_2003,Catalunya_nni)
 
-Catalunya_2004 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004")) 
+Catalunya_2004 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004")) 
 nn1_2004 <- as.data.frame(nni(Catalunya_2004))
 Year <- 2004
 nni_2004$Year <- Year
 Catalunya_nni <- rbind(nni_2004,Catalunya_nni)
 
-Catalunya_2005 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2005 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005")) 
 nn1_2005 <- as.data.frame(nni(Catalunya_2005))
 Year <- 2005
 nni_2005$Year <- Year
 Catalunya_nni <- rbind(nni_2005,Catalunya_nni)
 
-Catalunya_2006 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2006 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006")) 
 nn1_2006 <- as.data.frame(nni(Catalunya_2006))
 Year <- 2006
 nni_2006$Year <- Year
 Catalunya_nni <- rbind(nni_2006,Catalunya_nni)
 
-Catalunya_2007 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2007 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006", "2007")) 
 nn1_2007 <- as.data.frame(nni(Catalunya_2007))
 Year <- 2007
 nni_2007$Year <- Year
 Catalunya_nni <- rbind(nni_2007,Catalunya_nni)
 
-Catalunya_2008 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2008 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006", "2007", "2008")) 
 nn1_2008 <- as.data.frame(nni(Catalunya_2008))
 Year <- 2008
 nni_2008$Year <- Year
 Catalunya_nni <- rbind(nni_2008,Catalunya_nni)
 
-Catalunya_2009 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2009 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006", "2007", "2008", "2009")) 
 nn1_2009 <- as.data.frame(nni(Catalunya_2009))
 Year <- 2009
 nni_2009$Year <- Year
 Catalunya_nni <- rbind(nni_2009,Catalunya_nni)
 
-Catalunya_2010 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2010 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006", "2007", "2008", "2009", "2010")) 
 nn1_2010 <- as.data.frame(nni(Catalunya_2010))
 Year <- 2010
 nni_2010$Year <- Year
 Catalunya_nni <- rbind(nni_2010,Catalunya_nni)
 
-Catalunya_2011 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2011 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006", "2007", "2008", "2009", "2010",
                                                      "2011")) 
 nn1_2011 <- as.data.frame(nni(Catalunya_2011))
@@ -3074,7 +3074,7 @@ Year <- 2011
 nni_2011$Year <- Year
 Catalunya_nni <- rbind(nni_2011,Catalunya_nni)
 
-Catalunya_2012 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2012 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006", "2007", "2008", "2009", "2010",
                                                      "2011", "2012")) 
 nn1_2012 <- as.data.frame(nni(Catalunya_2012))
@@ -3082,7 +3082,7 @@ Year <- 2012
 nni_2012$Year <- Year
 Catalunya_nni <- rbind(nni_2012,Catalunya_nni)
 
-Catalunya_2013 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2013 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006", "2007", "2008", "2009", "2010",
                                                      "2011", "2012", "2013")) 
 nni_2013 <- as.data.frame(nni(Catalunya_2013))
@@ -3090,7 +3090,7 @@ Year <- 2013
 nni_2013$Year <- Year
 Catalunya_nni <- rbind(nni_2013,Catalunya_nni)
 
-Catalunya_2014 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2014 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006", "2007", "2008", "2009", "2010",
                                                      "2011", "2012", "2013", "2014")) 
 nni_2014 <- as.data.frame(nni(Catalunya_2014))
@@ -3098,7 +3098,7 @@ Year <- 2014
 nni_2014$Year <- Year
 Catalunya_nni <- rbind(nni_2014,Catalunya_nni)
 
-Catalunya_2015 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2015 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006", "2007", "2008", "2009", "2010",
                                                      "2011", "2012", "2013", "2014", "2015")) 
 nni_2015 <- as.data.frame(nni(Catalunya_2015))
@@ -3106,7 +3106,7 @@ Year <- 2015
 nni_2015$Year <- Year
 Catalunya_nni <- rbind(nni_2015,Catalunya_nni)
 
-Catalunya_2016 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2016 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006", "2007", "2008", "2009", "2010",
                                                      "2011", "2012", "2013", "2014", "2015", "2016")) 
 nni_2016 <- as.data.frame(nni(Catalunya_2016))
@@ -3114,7 +3114,7 @@ Year <- 2016
 nni_2016$Year <- Year
 Catalunya_nni <- rbind(nni_2016,Catalunya_nni)
 
-Catalunya_2017 <- Catalunya_2 %>% filter(Year %in% c("1999", "2000", "2001", "2002", "2003", "2004",
+Catalunya_2017 <- Catalunya_2 %>% filter(Year %in% c("2000", "2001", "2002", "2003", "2004",
                                                      "2005", "2006", "2007", "2008", "2009", "2010",
                                                      "2011", "2012", "2013", "2014", "2015", "2016",
                                                      "2017")) 
