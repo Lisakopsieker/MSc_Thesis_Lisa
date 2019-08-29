@@ -156,7 +156,7 @@ pm5 <- ggplot(data = m5df, aes(x = x, y = m5_y)) +
   geom_line(data = data.frame(x, y), aes(x = x, y = y)) +   # original data line
   geom_point(data = data.frame(x, y), aes(x = x, y = y)) +  # original data points
   geom_line(colour = 'red') +
-  labs(title = "UK | Compound", x="Sequence", y="NNI") # Print line for model
+  labs(title = "UK | Compound", x="Sequence", y="NNI") # print line for model
 print(pm5)    # print plot
 
 # plot method 2
@@ -201,7 +201,7 @@ print(UK_plot_inverse) # print plot
 # s-curve model
 m7 <- nls(y ~ I(exp(b0 + b1/x)), data.frame(x, y), start = list(b0 = 1, b1 = 1)) # create model
 summary(m7) # model summary
-coef(m7)['b0'] #nassign coefficients
+coef(m7)['b0'] # assign coefficients
 coef(m7)['b1']
 AIC(m7) #mget AIC value
 
@@ -245,7 +245,7 @@ pm8 <- ggplot(data = m8df, aes(x = x, y = m8_y)) +
   geom_line(data = data.frame(x, y), aes(x = x, y = y)) +   # original data line
   geom_point(data = data.frame(x, y), aes(x = x, y = y)) +  # original data points
   geom_line(colour = 'red') +
-  labs(title = "UK | Growth", x="Sequence", y="NNI")# Print line for model
+  labs(title = "UK | Growth", x="Sequence", y="NNI") # print line for model
 print(pm8)    # print plot
 
 # plot method 2
@@ -274,7 +274,7 @@ pm9 <- ggplot(data = m9df, aes(x = x, y = m9_y)) +
   geom_line(data = data.frame(x, y), aes(x = x, y = y)) +   # original data line
   geom_point(data = data.frame(x, y), aes(x = x, y = y)) +  # original data points
   geom_line(colour = 'red') +
-  labs(title = "UK | Exponential", x="Sequence", y="NNI")# Print line for model
+  labs(title = "UK | Exponential", x="Sequence", y="NNI") # print line for model
 print(pm9)    # print plot
 
 # plot method 2
@@ -307,7 +307,7 @@ pm10 <- ggplot(data = m10df, aes(x = x, y = m10_y)) +
   labs(title = "UK | Quadratic", x="Sequence", y="NNI")# Print line for model
 print(pm10)    # print plot
 
-#plot method 2
+# plot method 2
 UK_plot_quad <- ggplot(UK_nni_asc, aes(sequence, NNI)) + 
   geom_point() + theme_classic() +
   geom_smooth(method = "lm", 
